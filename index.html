@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Kalkulator Nilai Mahasiswa</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div class="calculator-container">
+            <h1>Kalkulator Nilai Mahasiswa</h1>
+            <form id="nilaiForm">
+                <label for="tugas">Nilai Tugas (30%)</label>
+                <input type="number" id="tugas" placeholder="Masukkan nilai Tugas" required />
+
+                <label for="uts">Nilai UTS (30%)</label>
+                <input type="number" id="uts" placeholder="Masukkan nilai UTS" required />
+
+                <label for="uas">Nilai UAS (40%)</label>
+                <input type="number" id="uas" placeholder="Masukkan nilai UAS" required />
+
+                <button type="button" onclick="hitungNilai()">Hitung Nilai Akhir</button>
+            </form>
+            <div id="hasil">
+                <div id="kontribusitugas"></div>
+                <div id="kontribusiuts"></div>
+                <div id="kontribusiuas"></div>
+                <div id="nilaiangka"></div>
+                <div id="nilaihuruf"></div>
+                <div id="status"></div>
+            </div>
+        </div>
+
+        <script>
+            function hitungNilai() {
+                let inputTugas = document.getElementById('tugas').value; // Nilai Tugas
+                let inputUts = document.getElementById('uts').value; // Nilai UTS
+                let inputUas = document.getElementById('uas').value; // Nilai UAS
+
+                const persentaseTugas = 0.3; // Persentase Tugas : 30%
+                const persentaseUts = 0.3; // Persentase UTS : 30%
+                const persentaseUas = 0.4; // Persentase UAS : 40%
+
+                let nilaiAngka, nilaiHuruf, kontribusiTugas, kontribusiUts, kontribusiUas; // Variabel Nilai Angka, Nilai Huruf, Kontribusi Tugas, Kontribusi UTS, Kontribusi UAS
+
+                if (
+                    // Pengecekan Nilai Tugas, UTS, dan UAS harus di antara 0-100
+                    inputTugas < 0 ||
+                    inputTugas > 100 ||
+                    inputUts < 0 ||
+                    inputUts > 100 ||
+                    inputUas < 0 ||
+                    inputUas > 100
+                ) {
+                    alert('Nilai harus diantara 0-100');
+                } else {
+                    kontribusiTugas = inputTugas * persentaseTugas; // Perhitungan Kontribusi Tugas
+                    kontribusiUts = inputUts * persentaseUts; // Perhitungan Kontribusi UTS
+                    kontribusiUas = inputUas * persentaseUas; // Perhitungan Kontribusi UAS
+                    nilaiAngka = kontribusiTugas + kontribusiUts + kontribusiUas; // Perhitungan Nilai Akhir
+
+                    // Perhitungan Nilai Huruf Sesuai dengan Kategori Yang Diminta
+                    if (nilaiAngka >= 90 && nilaiAngka <= 100) {
+                        nilaiHuruf = 'A';
+                    } else if (nilaiAngka >= 80 && nilaiAngka < 90) {
+                        nilaiHuruf = 'B';
+                    } else if (nilaiAngka >= 70 && nilaiAngka < 80) {
+                        nilaiHuruf = 'C';
+                    } else if (nilaiAngka >= 60 && nilaiAngka < 70) {
+                        nilaiHuruf = 'D';
+                    } else if (nilaiAngka < 60 && nilaiAngka >= 0) {
+                        nilaiHuruf = 'E';
+                    } else {
+                        alert('Nilai harus diantara 0-100');
+                    }
+
+                    // Menampilkan Hasil Perhitungan
+                    document.getElementById('kontribusitugas').innerHTML =
+                        'Kontribusi Tugas: ' + kontribusiTugas;
+                    document.getElementById('kontribusiuts').innerHTML =
+                        'Kontribusi UTS: ' + kontribusiUts;
+                    document.getElementById('kontribusiuas').innerHTML =
+                        'Kontribusi UAS: ' + kontribusiUas;
+                    document.getElementById('nilaiangka').innerHTML = 'Nilai Akhir: ' + nilaiAngka;
+                    document.getElementById('nilaihuruf').innerHTML = 'Nilai Huruf: ' + nilaiHuruf;
+
+                    // Menentukan Status Lulus Atau Tidak Jika Nilai Dibawah C Maka Tidak Lulus
+                    if (nilaiHuruf > 'C' && nilaiHuruf <= 'E') {
+                        document.getElementById('status').innerHTML = 'Status: Tidak Lulus';
+                        document.getElementById('hasil').classList.add('tidaklulus');
+                        document.getElementById('hasil').classList.remove('lulus');
+                    } else if (nilaiHuruf <= 'C' && nilaiHuruf >= 'A') {
+                        document.getElementById('status').innerHTML = 'Status: Lulus';
+                        document.getElementById('hasil').classList.add('lulus');
+                        document.getElementById('hasil').classList.remove('tidaklulus');
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>
